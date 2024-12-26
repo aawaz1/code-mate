@@ -1,6 +1,5 @@
 import { Theme } from "../../../types";
-import { Monaco } from "@monaco-editor/react";
-import { editor as monacoEditor } from "monaco-editor";
+
 
 
 
