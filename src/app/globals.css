@@ -19,3 +19,38 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+
+
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1rem; /* Adjust the size of the thumb */
+    height: 1rem;
+    background: #16a576; /* Tailwind's green-600 */
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+    background: #16a34a; /* Tailwind's green-600 */
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%; /* Adjust the slider width */
+    background: transparent; /* Ensure the track background is transparent */
+  }
+
+
+
+
+
+
+
