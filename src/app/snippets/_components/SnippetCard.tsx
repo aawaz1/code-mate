@@ -11,9 +11,7 @@ import Image from "next/image"
 import { toast } from "react-toastify"
 import StarButton from "@/components/StarButton"
 
-interface SnippetCardProps {
-    snippet : {}
-}
+
 
 const SnippetCard = ({snippet} : {snippet : Snippet}) => {
     const {user} = useUser();

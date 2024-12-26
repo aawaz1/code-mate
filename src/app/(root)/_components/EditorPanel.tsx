@@ -1,28 +1,33 @@
 "use client"
 import { useCodeEditorStore } from '@/store/useCodeEditorStore';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { defineMonacoThemes, LANGUAGE_CONFIG } from '../_constants';
 import { Editor } from '@monaco-editor/react';
 import { RotateCcwIcon, ShareIcon, TypeIcon } from 'lucide-react';
 import Image from 'next/image';
-import {motion} from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useClerk } from '@clerk/nextjs';
 import { EditorPanelSkeleton } from './EditorPanelSkeleton';
 import ShareSnippetDialog from './ShareSnippetDialog';
 import useMounted from '@/hooks/useMounted';
-import { ToastContainer } from 'react-toastify';
+import * as monaco from 'monaco-editor';
 
 const EditorPanel = () => {
   const clerk = useClerk();
   const mounted = useMounted();
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
-  const { language, theme, fontSize, editor, setFontSize, setEditor } = useCodeEditorStore();
+  const { language, theme, fontSize, setFontSize } = useCodeEditorStore();
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   useEffect(() => {
     const savedCode = localStorage.getItem(`editor-code-${language}`);
     const newCode = savedCode || LANGUAGE_CONFIG[language].defaultCode;
-    if (editor) editor.setValue(newCode);
-  }, [language, editor]);
+
+    // Ensure the editor instance is set and accessible before calling setValue
+    if (editorRef.current) {
+      editorRef.current.setValue(newCode);
+    }
+  }, [language]);
 
   useEffect(() => {
     const savedFontSize = localStorage.getItem("editor-font-size");
@@ -37,17 +42,19 @@ const EditorPanel = () => {
 
   const handleRefresh = () => {
     const defaultCode = LANGUAGE_CONFIG[language].defaultCode;
-    if (editor) editor.setValue(defaultCode);
+    if (editorRef.current) {
+      editorRef.current.setValue(defaultCode);
+    }
     localStorage.removeItem(`editor-code-${language}`);
   };
-    const handleEditorChange = (value : string | undefined) => {
-      if(value){
-        return localStorage.setItem(`editor-code-${language}` , value)
-      }
-    };
 
-  if (!mounted) return <EditorPanelSkeleton/>
+  const handleEditorChange = (value: string | undefined) => {
+    if (value) {
+      localStorage.setItem(`editor-code-${language}`, value);
+    }
+  };
 
+  if (!mounted) return <EditorPanelSkeleton />
 
   return (
     <div className="relative">
@@ -69,16 +76,15 @@ const EditorPanel = () => {
               <TypeIcon className="size-4 text-gray-400" />
               <div className="flex items-center gap-3 ">
                 <input
-                
                   type="range"
                   min="12"
                   max="24"
                   value={fontSize}
                   onChange={(e) => handleFontSizeChange(parseInt(e.target.value))}
                   className="w-20 h-1 bg-gray-600 rounded-lg cursor-pointer"
-                   style={{
-          background: `linear-gradient(to right, #16a34a ${(fontSize - 12) * 100 / 12}%, #e5e7eb ${(fontSize - 12) * 100 / 12}%)`
-        }}
+                  style={{
+                    background: `linear-gradient(to right, #16a34a ${(fontSize - 12) * 100 / 12}%, #e5e7eb ${(fontSize - 12) * 100 / 12}%)`
+                  }}
                 />
                 <span className="text-sm font-medium text-gray-400 min-w-[2rem] text-center">
                   {fontSize}
@@ -119,7 +125,9 @@ const EditorPanel = () => {
               onChange={handleEditorChange}
               theme={theme}
               beforeMount={defineMonacoThemes}
-              onMount={(editor) => setEditor(editor)}
+              onMount={(editor) => {
+                editorRef.current = editor;
+              }}
               options={{
                 minimap: { enabled: false },
                 fontSize,
@@ -146,11 +154,10 @@ const EditorPanel = () => {
 
           {!clerk.loaded && <EditorPanelSkeleton />}
         </div>
-        
       </div>
       {isShareDialogOpen && <ShareSnippetDialog onClose={() => setIsShareDialogOpen(false)} />}
     </div>
   )
 }
 
-export default EditorPanel
+export default EditorPanel;

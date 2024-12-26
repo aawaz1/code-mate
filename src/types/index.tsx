@@ -1,6 +1,6 @@
-import { Monaco } from "@monaco-editor/react";
-import { editor as monacoEditor } from "monaco-editor";
+// import { editor as monacoEditor } from "monaco-editor";
 import { Id } from "../../convex/_generated/dataModel";
+import { Monaco } from "@monaco-editor/react";
 
 export interface Theme {
   id: string;
@@ -38,24 +38,43 @@ export interface ExecutionResult {
   error: string | null;
 }
 
+
 export interface CodeEditorState {
   language: string;
- 
   output: string;
   isRunning: boolean;
   error: string | null;
   theme: string;
   fontSize: number;
-  editor: monacoEditor.IStandaloneCodeEditor | null; // Correctly typing the editor
+  editor: Monaco | null;
   executionResult: ExecutionResult | null;
 
-  setEditor: (editor: monacoEditor.IStandaloneCodeEditor) => void;
+  setEditor: (editor: Monaco) => void;
   getCode: () => string;
   setLanguage: (language: string) => void;
   setTheme: (theme: string) => void;
   setFontSize: (fontSize: number) => void;
   runCode: () => Promise<void>;
 }
+
+// export interface CodeEditorState {
+//   language: string;
+ 
+//   output: string;
+//   isRunning: boolean;
+//   error: string | null;
+//   theme: string;
+//   fontSize: number;
+//   editor: monacoEditor.IStandaloneCodeEditor | null; // Correctly typing the editor
+//   executionResult: ExecutionResult | null;
+
+//   setEditor: (editor: monacoEditor.IStandaloneCodeEditor) => void;
+//   getCode: () => string;
+//   setLanguage: (language: string) => void;
+//   setTheme: (theme: string) => void;
+//   setFontSize: (fontSize: number) => void;
+//   runCode: () => Promise<void>;
+// }
 
 export interface Snippet {
   _id: Id<"snippets">;

@@ -99,7 +99,7 @@ const SnippetsPage = () => {
               <span className="text-sm text-gray-400">Languages:</span>
             </div>
 
-            {popularLanguages?.map((lang : any) => (
+            {popularLanguages?.map((lang) => (
               <button
                 key={lang}
                 onClick={() => setSelectedLanguage(lang === selectedLanguage ? null : lang)}
@@ -171,7 +171,7 @@ const SnippetsPage = () => {
           layout
         >
           <AnimatePresence mode="popLayout">
-            {filteredSnippets.map((snippet : any) => (
+            {filteredSnippets.map((snippet) => (
               <SnippetCard key={snippet._id} snippet={snippet} />
             ))}
           </AnimatePresence>

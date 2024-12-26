@@ -9,7 +9,7 @@ import { useCodeEditorStore } from '@/store/useCodeEditorStore';
 import useMounted from '@/hooks/useMounted';
 
 
-const LanguageSelector = ({hasAccess} :{hasAccess : Boolean}) => {
+const LanguageSelector = ({hasAccess} :{hasAccess : boolean}) => {
   const [isOpen ,setIsOpen] = useState(false);
   const mounted = useMounted()
   const { language, setLanguage } = useCodeEditorStore();
